@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Earthquake.API/Earthquake.API.csproj" />
+  <Project Path="Earthquake.Data/Earthquake.Data.csproj" />
+  <Project Path="Earthquake.DTO/Earthquake.DTO.csproj" />
+  <Project Path="Earthquake.MVC/Earthquake.MVC.csproj" />
+  <Project Path="Earthquake.Repository/Earthquake.Repository.csproj" />
+</Solution>
