@@ -1,29 +1,51 @@
+using Earthquake.MVC.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Habilitar controladores y vistas.
 builder.Services.AddControllersWithViews();
+
+// Habilitar la caché en memoria del MVC.
+builder.Services.AddMemoryCache();
+
+// Registrar el servicio y configurar su cliente HTTP.
+builder.Services.AddHttpClient<
+    IEarthquakeApiService,
+    EarthquakeApiService>(client =>
+    {
+        var baseUrl = builder.Configuration["ApiBaseUrl"];
+
+        if (string.IsNullOrWhiteSpace(baseUrl))
+        {
+            throw new InvalidOperationException(
+                "Falta configurar ApiBaseUrl en appsettings.json del MVC.");
+        }
+
+        client.BaseAddress = new Uri(
+            baseUrl.TrimEnd('/') + "/");
+
+        client.Timeout = TimeSpan.FromMinutes(10);
+    });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
 
+// Publicar CSS, JavaScript e imágenes.
+app.UseStaticFiles();
+
+app.UseRouting();
 app.UseAuthorization();
 
-app.MapStaticAssets();
-
+// Mantener Home hasta crear el nuevo controlador y su vista.
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+    pattern: "{controller=Earthquake}/{action=Index}/{id?}");
 
 app.Run();

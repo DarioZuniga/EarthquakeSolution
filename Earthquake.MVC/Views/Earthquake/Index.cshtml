@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Buscar sismos por país";
+}
+
+<section id="earthquake-app"
+         data-search-url="@Url.Action("Search", "Earthquake")"
+         data-init-error="@ViewData["InitError"]">
+
+    <!-- Buscador -->
+    <div class="buscador">
+        <p class="text-primary fw-semibold">
+            EXPLORA POR PAÍS
+        </p>
+
+        <h1>Sismos e información del país</h1>
+
+        <p class="text-muted">
+            Consulta los registros almacenados de USGS.
+        </p>
+
+        <form id="search-form" class="d-flex gap-2 mt-4">
+            <label for="country" class="visually-hidden">
+                Nombre del país
+            </label>
+
+            <input id="country"
+                   type="text"
+                   class="form-control form-control-lg"
+                   maxlength="100"
+                   placeholder="Ejemplo: Puerto Rico"
+                   autocomplete="country-name" />
+
+            <button id="search-button"
+                    type="submit"
+                    class="btn btn-primary px-4">
+                Buscar
+            </button>
+        </form>
+
+        <p id="loading"
+           class="text-primary mt-3"
+           role="status"
+           hidden>
+            Buscando información...
+        </p>
+    </div>
+
+    <!-- Información del país -->
+    <aside id="country-card"
+           class="country-card card shadow-sm"
+           hidden>
+
+        <div class="card-body">
+            <p class="text-primary small fw-bold">
+                INFORMACIÓN DEL PAÍS
+            </p>
+
+            <h2 id="country-name" class="h4"></h2>
+
+            <p>
+                Capital:
+                <strong id="country-capital"></strong>
+            </p>
+
+            <p class="mb-0">
+                Población:
+                <strong id="country-population"></strong>
+            </p>
+        </div>
+    </aside>
+
+    <!-- Resultados de sismos -->
+    <section id="results" class="mt-4" hidden>
+        <h2 id="results-title" class="h4"></h2>
+
+        <p id="empty-message"
+           class="alert alert-info"
+           hidden>
+            No se encontraron sismos para este país
+            en los registros almacenados.
+        </p>
+
+        <div id="table-container"
+             class="table-responsive bg-white rounded shadow-sm">
+
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Lugar</th>
+                        <th>Magnitud</th>
+                        <th>Fecha local</th>
+                        <th>Latitud</th>
+                        <th>Longitud</th>
+                    </tr>
+                </thead>
+
+                <tbody id="earthquake-rows"></tbody>
+            </table>
+        </div>
+    </section>
+
+</section>
+
+@section Scripts {
+    <script src="~/js/earthquakes.js"
+            asp-append-version="true"></script>
+}
